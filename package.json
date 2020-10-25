@@ -17,10 +17,13 @@
     "indonesia",
     "api"
   ],
-  "author": "faisalhakim47",
+  "author": {
+    "name": "Faisal Hakim",
+    "email": "faisalhakim47@gmail.com"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/faisalhakim47/dwap/issues"
   },
-  "homepage": "https://github.com/faisalhakim47/dwap#readme"
+  "homepage": "https://github.com/faisalhakim47/dwap"
 }
