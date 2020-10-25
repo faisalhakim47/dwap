@@ -29,14 +29,14 @@ const data: Array<Row> = raw
 await emptyDir("./data");
 
 const provinces = data.filter((row) => row.type === 1);
-// const regencies = data.filter((row) => row.type === 2);
-// const districts = data.filter((row) => row.type === 3);
-// const villages = data.filter((row) => row.type === 4);
+const regencies = data.filter((row) => row.type === 2);
+const districts = data.filter((row) => row.type === 3);
+const villages = data.filter((row) => row.type === 4);
 
 await write("./data/provinces.json", provinces.map(formatProvince));
-// await write("./data/regencies.json", regencies.map(formatRegency));
-// await write("./data/districts.json", districts.map(formatDistrict));
-// await write("./data/villages.json", villages.map(formatVillage));
+await write("./data/regencies.json", regencies.map(formatRegency));
+await write("./data/districts.json", districts.map(formatDistrict));
+await write("./data/villages.json", villages.map(formatVillage));
 
 for (const province of provinces) {
   const provinceDir = "./data/provinces/" + province.provinceId;
@@ -47,19 +47,19 @@ for (const province of provinces) {
     row.type === 2 &&
     row.provinceId === province.provinceId
   );
-  // const districts = data.filter((row) =>
-  //   row.type === 3 &&
-  //   row.provinceId === province.provinceId
-  // );
-  // const villages = data.filter((row) =>
-  //   row.type === 4 &&
-  //   row.provinceId === province.provinceId
-  // );
+  const districts = data.filter((row) =>
+    row.type === 3 &&
+    row.provinceId === province.provinceId
+  );
+  const villages = data.filter((row) =>
+    row.type === 4 &&
+    row.provinceId === province.provinceId
+  );
 
   await write(provinceDir + ".json", formatProvince(province));
   await write(provinceDir + "/regencies.json", regencies.map(formatRegency));
-  // await write(provinceDir + "/districts.json", districts.map(formatDistrict));
-  // await write(provinceDir + "/villages.json", villages.map(formatVillage));
+  await write(provinceDir + "/districts.json", districts.map(formatDistrict));
+  await write(provinceDir + "/villages.json", villages.map(formatVillage));
 
   for (const regency of regencies) {
     const regencyDir = provinceDir + "/regencies/" + regency.regencyId;
@@ -71,15 +71,15 @@ for (const province of provinces) {
       row.provinceId === province.provinceId &&
       row.regencyId === regency.regencyId
     );
-    // const villages = data.filter((row) =>
-    //   row.type === 4 &&
-    //   row.provinceId === province.provinceId &&
-    //   row.regencyId === regency.regencyId
-    // );
+    const villages = data.filter((row) =>
+      row.type === 4 &&
+      row.provinceId === province.provinceId &&
+      row.regencyId === regency.regencyId
+    );
 
     await write(regencyDir + ".json", formatRegency(regency));
     await write(regencyDir + "/districts.json", districts.map(formatDistrict));
-    // await write(regencyDir + "/villages.json", villages.map(formatVillage));
+    await write(regencyDir + "/villages.json", villages.map(formatVillage));
 
     for (const district of districts) {
       const districtDir = regencyDir + "/districts/" + district.districtId;
