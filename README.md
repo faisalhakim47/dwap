@@ -1,6 +1,6 @@
-# alamat
-API untuk Alamat di Indonesia 
+# DWAP
 
+Data Wilayah Administrasi Pemerintahan dapat diakses melalui browser atau server. Dapat digunakan untuk mempermudah input alamat wilayah Indonesia.
 
 # Sumber Data
 

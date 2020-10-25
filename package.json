@@ -1,0 +1,26 @@
+{
+  "name": "dwap",
+  "version": "1.0.0",
+  "description": "Data Wilayah Administrasi Pemerintahan Indonesia",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/faisalhakim47/dwap.git"
+  },
+  "keywords": [
+    "data",
+    "alamat",
+    "wilayah",
+    "indonesia",
+    "api"
+  ],
+  "author": "faisalhakim47",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/faisalhakim47/dwap/issues"
+  },
+  "homepage": "https://github.com/faisalhakim47/dwap#readme"
+}
