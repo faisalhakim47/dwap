@@ -1,8 +1,7 @@
 window.dwap = (function () {
     const CDN = 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@latest';
-
     function request(url) {
-        return new Promise((resolve, reject) => {
+        return new Promise(function (resolve, reject) {
             const req = new XMLHttpRequest();
             req.open('GET', url);
             req.addEventListener('readystatechange', () => {
@@ -14,27 +13,14 @@ window.dwap = (function () {
             req.send();
         });
     }
-
-    function getProvinces() {
-        return request(CDN + '/data/provinces.json');
-    }
-
-    function getRegencies({ provinceId }) {
-        return request(CDN + '/data/provinces/' + provinceId + '/regencies.json');
-    }
-
-    function getDistricts({ provinceId, regencyId }) {
-        return request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts.json');
-    }
-
-    function getVillages({ provinceId, regencyId, districtId }) {
-        return request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages.json');
-    }
-
     return {
-        getProvinces,
-        getRegencies,
-        getDistricts,
-        getVillages,
+        getProvinces: () => request(CDN + '/data/provinces.json'),
+        getRegencies: (provinceId) => request(CDN + '/data/provinces/' + provinceId + '/regencies.json'),
+        getDistricts: (provinceId, regencyId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts.json'),
+        getVillages: (provinceId, regencyId, districtId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages.json'),
+        getProvince: (provinceId) => request(CDN + '/data/provinces/' + provinceId + '.json'),
+        getRegency: (provinceId, regencyId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '.json'),
+        getDistrict: (provinceId, regencyId, districtId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '.json'),
+        getVillage: (provinceId, regencyId, districtId, villageId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages/' + villageId + '.json'),
     };
 })();
