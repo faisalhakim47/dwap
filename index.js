@@ -14,13 +14,47 @@ window.dwap = (function () {
         });
     }
     return {
-        getProvinces: () => request(CDN + '/data/provinces.json'),
-        getRegencies: (provinceId) => request(CDN + '/data/provinces/' + provinceId + '/regencies.json'),
-        getDistricts: (provinceId, regencyId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts.json'),
-        getVillages: (provinceId, regencyId, districtId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages.json'),
-        getProvince: (provinceId) => request(CDN + '/data/provinces/' + provinceId + '.json'),
-        getRegency: (provinceId, regencyId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '.json'),
-        getDistrict: (provinceId, regencyId, districtId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '.json'),
-        getVillage: (provinceId, regencyId, districtId, villageId) => request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages/' + villageId + '.json'),
+        getProvinces: function () {
+            return request(CDN + '/data/provinces.json');
+        },
+        getRegencies: function (provinceId) {
+            return provinceId
+                ? request(CDN + '/data/provinces/' + provinceId + '/regencies.json')
+                : request(CDN + '/data/regencies.json');
+        },
+        getDistricts: function (provinceId, regencyId) {
+            return provinceId
+                ? (
+                    regencyId
+                        ? request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts.json')
+                        : request(CDN + '/data/provinces/' + provinceId + '/districts.json')
+                )
+                : request(CDN + '/data/districts.json');
+        },
+        getVillages: function (provinceId, regencyId, districtId) {
+            return provinceId
+                ? (
+                    regencyId
+                        ? (
+                            districtId
+                                ? request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages.json')
+                                : request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/villages.json')
+                        )
+                        : request(CDN + '/data/provinces/' + provinceId + '/villages.json')
+                )
+                : request(CDN + '/data/villages.json');
+        },
+        getProvince: function (provinceId) {
+            return request(CDN + '/data/provinces/' + provinceId + '.json');
+        },
+        getRegency: function (provinceId, regencyId) {
+            return request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '.json');
+        },
+        getDistrict: function (provinceId, regencyId, districtId) {
+            return request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '.json');
+        },
+        getVillage: function (provinceId, regencyId, districtId, villageId) {
+            return request(CDN + '/data/provinces/' + provinceId + '/regencies/' + regencyId + '/districts/' + districtId + '/villages/' + villageId + '.json');
+        },
     };
 })();
