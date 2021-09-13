@@ -1,7 +1,7 @@
 import { emptyDir, ensureDir } from "https://deno.land/std@0.74.0/fs/mod.ts";
 
 const SOURCE =
-  "https://raw.githubusercontent.com/cahyadsn/wilayah/master/wilayah_2020.sql";
+  "https://raw.githubusercontent.com/cahyadsn/wilayah/master/db/wilayah_2020.sql";
 
 const request = await fetch(SOURCE);
 const raw = await request.text();

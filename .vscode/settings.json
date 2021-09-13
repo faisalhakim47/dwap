@@ -1,5 +1,9 @@
 {
     "deno.import_intellisense_origins": {
         "https://deno.land": true
-    }
+    },
+    "deno.enable": false,
+    "deno.lint": false,
+    "deno.unstable": false,
+    "deno.codeLens.implementations": true
 }
