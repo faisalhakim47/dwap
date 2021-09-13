@@ -36,7 +36,7 @@ window.dwap = (function () {
         /**
          * @param {string} CDN
          */
-        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.3') {
+        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.4') {
             this.CDN = CDN;
         }
 
@@ -63,7 +63,7 @@ window.dwap = (function () {
                 return this._request(
                     this.CDN
                     + '/data/provinces/' + provinceId
-                    + '/data/' + type + '.json'
+                    + '/' + type + '.json'
                 );
             }
             if (!districtId) {
@@ -71,7 +71,7 @@ window.dwap = (function () {
                     this.CDN
                     + '/data/provinces/' + provinceId
                     + '/regencies/' + regencyId
-                    + '/data/' + type + '.json'
+                    + '/' + type + '.json'
                 );
             }
             return this._request(
@@ -79,7 +79,7 @@ window.dwap = (function () {
                 + '/data/provinces/' + provinceId
                 + '/regencies/' + regencyId
                 + '/districts/' + districtId
-                + '/data/' + type + '.json'
+                + '/' + type + '.json'
             );
         }
 

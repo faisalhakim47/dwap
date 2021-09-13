@@ -18,5 +18,5 @@ Sumber data berasal dari https://github.com/cahyadsn/wilayah
 # Pasang melalui Script
 
 ```html
-<script src="https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.3/index.min.js"></script>
+<script src="https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.4/index.min.js"></script>
 ```
