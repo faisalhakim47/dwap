@@ -36,7 +36,7 @@ window.dwap = (function () {
         /**
          * @param {string} CDN
          */
-        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.4') {
+        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.5') {
             this.CDN = CDN;
         }
 
@@ -320,60 +320,66 @@ window.dwap = (function () {
 
         /**
          * @param {HTMLSelectElement} select
-         * @param {boolean} showPlaceholder
          */
-        _emptyOptions(select, showPlaceholder) {
+        _emptyOptions(select) {
             while (select.options.length !== 0) {
                 select.options.remove(0);
             }
-            if (showPlaceholder) {
-                const option = document.createElement('option');
-                option.disabled = true;
-                option.selected = true;
-                option.textContent = '--- Pilih ---';
-                select.appendChild(option);
-            }
-            select.disabled = true;
         }
 
         /**
          * @param {HTMLSelectElement} select
          * @param {Array<{ id: string, name: string}>} options
          */
-        _renderOptions(select, options, preselectValue = null) {
-            this._emptyOptions(select, preselectValue === null);
+        _renderOptions(select, options) {
+            this._emptyOptions(select);
             options.forEach((data) => {
                 const option = document.createElement('option');
                 option.value = data.id;
                 option.textContent = data.name;
-                option.selected = data.id === preselectValue;
                 select.appendChild(option);
             });
-            select.disabled = false;
+        }
+
+        /**
+         * @param {HTMLSelectElement} select
+         * @returns {void}
+         */
+        _renderPlaceholderOption(select) {
+            const firstOption = select.options.item(0);
+            const isPlaceholderExist = firstOption
+                ? firstOption.dataset.placeholder === 'placeholder'
+                : false;
+            if (!isPlaceholderExist) {
+                const option = document.createElement('option');
+                option.dataset.placeholder = 'placeholder'
+                option.disabled = true;
+                option.textContent = '--- Pilih ---';
+                select.insertAdjacentElement('afterbegin', option);
+            }
         }
 
         /**
          * @param {HTMLSelectElement} select
          * @param {string} value
+         * @returns {void}
          */
         _setSelected(select, value) {
-            if (!value) {
-                const isPlaceholderExist = select.options.item(0).disabled;
-                if (!isPlaceholderExist) {
-                    const option = document.createElement('option');
-                    option.disabled = true;
-                    option.selected = true;
-                    option.textContent = '--- Pilih ---';
-                    select.insertAdjacentElement('afterbegin', option);
+            if (value) {
+                const optionIndex = Array.prototype.slice.call(select.options)
+                    .findIndex((option) => {
+                        return option.value === value;
+                    });
+                if (optionIndex === -1) {
+                    this._renderPlaceholderOption(select);
+                    select.selectedIndex = 0;
+                } else {
+                    select.selectedIndex = optionIndex;
                 }
+            } else {
+                this._renderPlaceholderOption(select);
                 select.selectedIndex = 0;
-                return;
             }
-            const optionIndex = Array.prototype.slice.call(select.options)
-                .findIndex(select.options, (option) => {
-                    return option.value === value;
-                });
-            select.selectedIndex = optionIndex === -1 ? 0 : optionIndex;
         }
 
         /**
@@ -382,20 +388,18 @@ window.dwap = (function () {
          */
         _renderProvinces(provinceId) {
             const select = this._provinceSelect;
+            select.disabled = true;
             let promise = Promise.resolve();
             if (select.dataset.rendered !== 'rendered') {
                 promise = this.repo.getProvinces()
                     .then((options) => {
-                        this._renderOptions(
-                            select,
-                            options,
-                            provinceId
-                        );
+                        this._renderOptions(select, options);
                         select.dataset.rendered = 'rendered'
                     });
             }
             return promise.then(() => {
                 this._setSelected(select, provinceId);
+                select.disabled = false;
             });
         }
 
@@ -406,20 +410,18 @@ window.dwap = (function () {
          */
         _renderRegencies(provinceId, regencyId) {
             const select = this._regencySelect;
+            select.disabled = true;
             let promise = Promise.resolve();
             if (select.dataset.provinceId !== provinceId) {
                 promise = this.repo.getRegencies(provinceId)
                     .then((options) => {
-                        this._renderOptions(
-                            select,
-                            options,
-                            regencyId
-                        );
+                        this._renderOptions(select, options);
                         select.dataset.provinceId = provinceId;
                     });
             }
             return promise.then(() => {
                 this._setSelected(select, regencyId);
+                select.disabled = false;
             });
         }
 
@@ -431,20 +433,18 @@ window.dwap = (function () {
          */
         _renderDistricts(provinceId, regencyId, districtId) {
             const select = this._districtSelect;
+            select.disabled = true;
             let promise = Promise.resolve();
             if (select.dataset.regencyId !== regencyId) {
                 promise = this.repo.getDistricts(provinceId, regencyId)
                     .then((options) => {
-                        this._renderOptions(
-                            select,
-                            options,
-                            districtId
-                        );
+                        this._renderOptions(select,options);
                         select.dataset.regencyId = regencyId;
                     });
             }
             return promise.then(() => {
                 this._setSelected(select, districtId);
+                select.disabled = false;
             });
         }
 
@@ -457,20 +457,18 @@ window.dwap = (function () {
          */
         _renderVillages(provinceId, regencyId, districtId, villageId) {
             const select = this._villageSelect;
+            select.disabled = true;
             let promise = Promise.resolve();
             if (select.dataset.districtId !== districtId) {
                 promise = this.repo.getVillages(provinceId, regencyId, districtId)
                     .then((options) => {
-                        this._renderOptions(
-                            select,
-                            options,
-                            villageId
-                        );
+                        this._renderOptions(select, options);
                         select.dataset.districtId = districtId;
                     });
             }
             return promise.then(() => {
                 this._setSelected(select, villageId);
+                select.disabled = false;
             });
         }
 
@@ -482,7 +480,6 @@ window.dwap = (function () {
          * @returns {Promise<void>}
          */
         setValue(provinceId, regencyId, districtId, villageId) {
-            this._provinceSelect.disabled = true;
             this._regencySelect.disabled = true;
             this._districtSelect.disabled = true;
             this._villageSelect.disabled = true;
@@ -500,9 +497,16 @@ window.dwap = (function () {
                     : Promise.resolve(true),
             ];
             return Promise.all(promises).then(([_, emptyRegency, emptyDistrict, emptyVillage]) => {
-                if (emptyRegency) this._emptyOptions(this._regencySelect, true);
-                if (emptyDistrict) this._emptyOptions(this._districtSelect, true);
-                if (emptyVillage) this._emptyOptions(this._villageSelect, true);
+                [
+                    { isEmpty: emptyRegency, select: this._regencySelect },
+                    { isEmpty: emptyDistrict, select: this._districtSelect },
+                    { isEmpty: emptyVillage, select: this._villageSelect },
+                ].forEach(({ isEmpty, select }) => {
+                    if (isEmpty) {
+                        this._emptyOptions(select);
+                        select.disabled = true;
+                    }
+                });
             });
         }
 
