@@ -36,7 +36,7 @@ window.dwap = (function () {
         /**
          * @param {string} CDN
          */
-        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.1') {
+        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.2') {
             this.CDN = CDN;
         }
 
@@ -187,6 +187,29 @@ window.dwap = (function () {
         constructor(el, { repo = new Repository() } = {}) {
             this.el = el;
             this.repo = repo;
+
+            this._handleProvinceChange = () => {
+                this.setValue(this.provinceCode);
+            };
+
+            this._handleRegencyChange = () => {
+                this.setValue(this.provinceCode, this.regencyCode);
+            };
+
+            this._handleDistrictChange = () => {
+                this.setValue(this.provinceCode, this.regencyCode, this.districtCode);
+            };
+
+            this._provinceSelect.addEventListener('change', this._handleProvinceChange);
+            this._regencySelect.addEventListener('change', this._handleRegencyChange);
+            this._districtSelect.addEventListener('change', this._handleDistrictChange);
+
+            this.destroy = () => {
+                this._provinceSelect.removeEventListener('change', this._handleProvinceChange);
+                this._regencySelect.removeEventListener('change', this._handleRegencyChange);
+                this._districtSelect.removeEventListener('change', this._handleDistrictChange);
+                this.el = null;
+            };
         }
 
         /**
@@ -277,18 +300,50 @@ window.dwap = (function () {
         }
 
         /**
+         * @param {HTMLSelectElement} select
+         * @param {string} value
+         */
+        _setSelected(select, value) {
+            if (!value) {
+                const isPlaceholderExist = select.options.item(0).disabled;
+                if (!isPlaceholderExist) {
+                    const option = document.createElement('option');
+                    option.disabled = true;
+                    option.selected = true;
+                    option.textContent = '--- Pilih ---';
+                    select.insertAdjacentElement('afterbegin', option);
+                }
+                select.selectedIndex = 0;
+                return;
+            }
+            const optionIndex = Array.prototype.slice.call(select.options)
+                .findIndex(select.options, (option) => {
+                    return option.value === value;
+                });
+            select.selectedIndex = optionIndex === -1 ? 0 : optionIndex;
+        }
+
+        /**
          * @param {string} [provinceId]
          * @returns {Promise<void>}
          */
         _renderProvinces(provinceId) {
-            return this.repo.getProvinces()
-                .then((options) => {
-                    this._renderOptions(
-                        this._provinceSelect,
-                        options,
-                        provinceId
-                    );
-                });
+            const select = this._provinceSelect;
+            let promise = Promise.resolve();
+            if (select.dataset.rendered !== 'rendered') {
+                promise = this.repo.getProvinces()
+                    .then((options) => {
+                        this._renderOptions(
+                            select,
+                            options,
+                            provinceId
+                        );
+                        select.dataset.rendered = 'rendered'
+                    });
+            }
+            return promise.then(() => {
+                this._setSelected(select, provinceId);
+            });
         }
 
         /**
@@ -297,14 +352,22 @@ window.dwap = (function () {
          * @returns {Promise<void>}
          */
         _renderRegencies(provinceId, regencyId) {
-            return this.repo.getRegencies(provinceId)
-                .then((options) => {
-                    this._renderOptions(
-                        this._regencySelect,
-                        options,
-                        regencyId
-                    );
-                });
+            const select = this._regencySelect;
+            let promise = Promise.resolve();
+            if (select.dataset.provinceId !== provinceId) {
+                promise = this.repo.getRegencies(provinceId)
+                    .then((options) => {
+                        this._renderOptions(
+                            select,
+                            options,
+                            regencyId
+                        );
+                        select.dataset.provinceId = provinceId;
+                    });
+            }
+            return promise.then(() => {
+                this._setSelected(select, regencyId);
+            });
         }
 
         /**
@@ -314,14 +377,22 @@ window.dwap = (function () {
          * @returns {Promise<void>}
          */
         _renderDistricts(provinceId, regencyId, districtId) {
-            return this.repo.getDistricts(provinceId, regencyId)
-                .then((options) => {
-                    this._renderOptions(
-                        this._districtSelect,
-                        options,
-                        districtId
-                    );
-                });
+            const select = this._districtSelect;
+            let promise = Promise.resolve();
+            if (select.dataset.regencyId !== regencyId) {
+                promise = this.repo.getDistricts(provinceId, regencyId)
+                    .then((options) => {
+                        this._renderOptions(
+                            select,
+                            options,
+                            districtId
+                        );
+                        select.dataset.regencyId = regencyId;
+                    });
+            }
+            return promise.then(() => {
+                this._setSelected(select, districtId);
+            });
         }
 
         /**
@@ -332,14 +403,22 @@ window.dwap = (function () {
          * @returns {Promise<void>}
          */
         _renderVillages(provinceId, regencyId, districtId, villageId) {
-            return this.repo.getVillages(provinceId, regencyId, districtId)
-                .then((options) => {
-                    this._renderOptions(
-                        this._villageSelect,
-                        options,
-                        villageId
-                    );
-                });
+            const select = this._villageSelect;
+            let promise = Promise.resolve();
+            if (select.dataset.districtId !== districtId) {
+                promise = this.repo.getVillages(provinceId, regencyId, districtId)
+                    .then((options) => {
+                        this._renderOptions(
+                            select,
+                            options,
+                            villageId
+                        );
+                        select.dataset.districtId = districtId;
+                    });
+            }
+            return promise.then(() => {
+                this._setSelected(select, villageId);
+            });
         }
 
         /**
@@ -350,6 +429,10 @@ window.dwap = (function () {
          * @returns {Promise<void>}
          */
         setValue(provinceId, regencyId, districtId, villageId) {
+            this._provinceSelect.disabled = true;
+            this._regencySelect.disabled = true;
+            this._districtSelect.disabled = true;
+            this._villageSelect.disabled = true;
             /** @type {Array<Promise<void|boolean>>} */
             const promises = [
                 this._renderProvinces(provinceId),
