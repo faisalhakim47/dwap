@@ -36,7 +36,7 @@ window.dwap = (function () {
         /**
          * @param {string} CDN
          */
-        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.2') {
+        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.3') {
             this.CDN = CDN;
         }
 
@@ -187,6 +187,7 @@ window.dwap = (function () {
         constructor(el, { repo = new Repository() } = {}) {
             this.el = el;
             this.repo = repo;
+            this.eventListeners = {};
 
             this._handleProvinceChange = () => {
                 this.setValue(this.provinceCode);
@@ -197,7 +198,15 @@ window.dwap = (function () {
             };
 
             this._handleDistrictChange = () => {
-                this.setValue(this.provinceCode, this.regencyCode, this.districtCode);
+                this.setValue(
+                    this.provinceCode,
+                    this.regencyCode,
+                    this.districtCode
+                );
+            };
+
+            this._handleVillageChange = () => {
+                this.emit('change', this.addressCode);
             };
 
             this._provinceSelect.addEventListener('change', this._handleProvinceChange);
@@ -209,7 +218,44 @@ window.dwap = (function () {
                 this._regencySelect.removeEventListener('change', this._handleRegencyChange);
                 this._districtSelect.removeEventListener('change', this._handleDistrictChange);
                 this.el = null;
+                this.repo = null;
+                this.eventListeners = null;
             };
+        }
+
+        /**
+         * @param {string} type
+         * @param {(payload: any) => void} listener
+         * @returns {void}
+         */
+        addEventListener(type, listener) {
+            const listeners = this.eventListeners[type] || (this.eventListeners[type] = []);
+            if (listeners.indexOf(listener) === -1) {
+                listeners.push(listener);
+            }
+        }
+
+        /**
+         * @param {string} type
+         * @param {(payload: any) => void} listener
+         * @returns {void}
+         */
+        removeEventListener(type, listener) {
+            this.eventListeners[type] = (this.eventListeners[type] = [])
+                .filter((_listener) => {
+                    return _listener !== listener;
+                });
+        }
+
+        /**
+         * @param {string} type
+         * @param {any} payload
+         */
+        emit(type, payload) {
+            (this.eventListeners[type] = [])
+                .forEach((listener) => {
+                    return listener(payload);
+                });
         }
 
         /**
@@ -263,6 +309,13 @@ window.dwap = (function () {
 
         get villageCode() {
             return this._getValueFromSelect(this._villageSelect);
+        }
+
+        /**
+         * @returns {string}
+         */
+         get addressCode() {
+            return this.provinceCode + this.regencyCode + this.districtCode + this.villageCode;
         }
 
         /**
