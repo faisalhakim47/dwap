@@ -36,7 +36,7 @@ window.dwap = (function () {
         /**
          * @param {string} CDN
          */
-        constructor(CDN = 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@latest') {
+        constructor(CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.1') {
             this.CDN = CDN;
         }
 
