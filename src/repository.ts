@@ -50,15 +50,15 @@ export class Repository {
         return this.getMany<Province>('provinces');
     }
 
-    public async getRegencies(provinceId: string) {
+    public async getRegencies(provinceId?: string) {
         return this.getMany<Regency>('regencies', provinceId);
     }
 
-    public async getDistricts(provinceId: string, regencyId: string) {
+    public async getDistricts(provinceId?: string, regencyId?: string) {
         return this.getMany<District>('districts', provinceId, regencyId);
     }
 
-    public async getVillages(provinceId: string, regencyId: string, districtId: string) {
+    public async getVillages(provinceId?: string, regencyId?: string, districtId?: string) {
         return this.getMany<Village>('villages', provinceId, regencyId, districtId);
     }
 
