@@ -1,0 +1,9 @@
+.vscode
+deps
+gen
+node_modules
+src
+
+build.ts
+index.html
+tsconfig.json
