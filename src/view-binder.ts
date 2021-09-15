@@ -26,7 +26,7 @@ export class ViewBinder {
 
     constructor(
         private el: HTMLElement,
-        private repo: Repository = new Repository(),
+        private repo: Repository,
         defaultAddressCode?: string,
     ) {
         const handleProvinceChange = () => {

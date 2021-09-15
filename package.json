@@ -1,6 +1,6 @@
 {
   "name": "dwap",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "description": "Data Wilayah Administrasi Pemerintahan Indonesia",
   "main": "dist/index.min.js",
   "scripts": {

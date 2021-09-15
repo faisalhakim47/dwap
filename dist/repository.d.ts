@@ -1,7 +1,7 @@
 import { District, Province, Regency, Village } from './domain.js';
 export declare class Repository {
     private CDN;
-    constructor(CDN?: string);
+    constructor(CDN: string);
     private request;
     private getMany;
     getProvinces(): Promise<Province[]>;

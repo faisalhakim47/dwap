@@ -36,9 +36,10 @@
 
     <p class="p-2">AddressCode: <span id="addressCodeDisplay" class="font-bold">-</span></p>
 
+    <!-- MEMAKAI ES MODULE -->
     <script type="module">
-        import { Repository, ViewBinder } from 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.8/dist/index.js';
-        const repository = new Repository();
+        import { Repository, ViewBinder } from 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.9/dist/index.js';
+        const repository = new Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.9');
         const viewBinder = new ViewBinder(
             document.getElementById('addressForm'),
             repository,
@@ -49,6 +50,21 @@
             addressCodeDisplay.textContent = addressCode;
         });
     </script>
+
+    <!-- MEMAKAI UMD -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.9/dist/index.browser.js"></script>
+    <script>
+        const repository = new Dwap.Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.9');
+        const viewBinder = new Dwap.ViewBinder(
+            document.getElementById('addressForm'),
+            repository,
+            '3101011001',
+        );
+        const addressCodeDisplay = document.getElementById('addressCodeDisplay');
+        viewBinder.addEventListener('change', (addressCode) => {
+            addressCodeDisplay.textContent = addressCode;
+        });
+    </script> -->
 
 </body>
 

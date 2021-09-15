@@ -15,8 +15,6 @@ Data Wilayah Administrasi Pemerintahan dapat diakses melalui browser atau server
 
 Sumber data berasal dari https://github.com/cahyadsn/wilayah
 
-# Pasang melalui Script
+# Contoh Penggunaan
 
-```html
-<script src="https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.8/dist/index.browser.js"></script>
-```
+Lihat file `example.html`

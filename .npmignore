@@ -1,4 +1,5 @@
 .vscode
+data
 deps
 gen
 node_modules
