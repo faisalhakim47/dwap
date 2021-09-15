@@ -1,14 +1,16 @@
 {
     "compilerOptions": {
         "allowUmdGlobalAccess": true,
+        "alwaysStrict": true,
         "declaration": true,
         "declarationMap": true,
+        "lib": ["ES2015", "DOM"],
         "module": "ESNext",
         "outDir": "dist",
-        "target": "ES5",
-        "inlineSourceMap": true
+        "sourceMap": true,
+        "target": "ES5"
     },
     "files": [
-        "src/index.ts"
+        "src/dwap.ts"
     ]
 }

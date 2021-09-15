@@ -1,3 +1,5 @@
+.cache
+.parcel-cache
 deps
 gen
 node_modules
