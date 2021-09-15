@@ -6,7 +6,7 @@
         "module": "ESNext",
         "outDir": "dist",
         "target": "ES5",
-        "sourceMap": true
+        "inlineSourceMap": true
     },
     "files": [
         "src/index.ts"

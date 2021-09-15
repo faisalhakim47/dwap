@@ -136,7 +136,7 @@ export class ViewBinder {
             });
     }
 
-    public async setAddressCode(addressCode: string) {
+    public async setAddressCode(addressCode: string = '') {
         return this.setValue(
             addressCode.slice(0, 2),
             addressCode.slice(2, 4),

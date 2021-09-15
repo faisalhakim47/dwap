@@ -38,8 +38,8 @@
 
     <!-- MEMAKAI ES MODULE -->
     <script type="module">
-        import { Repository, ViewBinder } from 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.11/dist/index.js';
-        const repository = new Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.11');
+        import { Repository, ViewBinder } from 'https://cdn.jsdelivr.net/npm/dwap@1.1.12/dist/index.js';
+        const repository = new Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@latest');
         const viewBinder = new ViewBinder(
             document.getElementById('addressForm'),
             repository,
@@ -52,9 +52,9 @@
     </script>
 
     <!-- MEMAKAI UMD -->
-    <!-- <script src="https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.11/dist/index.browser.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/dwap@1.1.12/dist/index.browser.js"></script>
     <script>
-        const repository = new Dwap.Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.11');
+        const repository = new Dwap.Repository('https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@latest');
         const viewBinder = new Dwap.ViewBinder(
             document.getElementById('addressForm'),
             repository,

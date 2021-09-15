@@ -26,7 +26,7 @@ export declare class ViewBinder {
     get villageCode(): string;
     get addressCode(): string;
     setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string): Promise<void>;
-    setAddressCode(addressCode: string): Promise<void>;
+    setAddressCode(addressCode?: string): Promise<void>;
     decodeAddressCode(addressCode: string): Promise<DecodedAddressCode>;
     private emit;
     private get provinceSelect();
