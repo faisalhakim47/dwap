@@ -22,10 +22,12 @@ export class ViewBinder {
 
     public destroy = () => {};
     private eventListeners: EventListeners = {};
+    private setValueQueue: Promise<void> = Promise.resolve();
 
     constructor(
         private el: HTMLElement,
         private repo: Repository = new Repository(),
+        defaultAddressCode?: string,
     ) {
         const handleProvinceChange = () => {
             this.setValue(this.provinceCode);
@@ -61,6 +63,8 @@ export class ViewBinder {
             this.repo = null;
             this.eventListeners = null;
         };
+
+        this.setAddressCode(defaultAddressCode);
     }
 
     public addEventListener(type: string, listener: EventListener): void {
@@ -101,30 +105,35 @@ export class ViewBinder {
         this.regencySelect.disabled = true;
         this.districtSelect.disabled = true;
         this.villageSelect.disabled = true;
-        const promises = [
-            this.renderProvinces(provinceId).then(() => false),
-            provinceId
-                ? this.renderRegencies(provinceId, regencyId).then(() => false)
-                : Promise.resolve(true),
-            provinceId && regencyId
-                ? this.renderDistricts(provinceId, regencyId, districtId).then(() => false)
-                : Promise.resolve(true),
-            provinceId && regencyId && districtId
-                ? this.renderVillages(provinceId, regencyId, districtId, villageId).then(() => false)
-                : Promise.resolve(true),
-        ];
-        return Promise.all(promises).then(([_, emptyRegency, emptyDistrict, emptyVillage]) => {
-            [
-                { isEmpty: emptyRegency, select: this.regencySelect },
-                { isEmpty: emptyDistrict, select: this.districtSelect },
-                { isEmpty: emptyVillage, select: this.villageSelect },
-            ].forEach(({ isEmpty, select }) => {
-                if (isEmpty) {
-                    this.emptyOptions(select);
-                    select.disabled = true;
-                }
+        return this.setValueQueue = this.setValueQueue
+            .then(async () => {
+                const [_, emptyRegency, emptyDistrict, emptyVillage] = await Promise.all([
+                    this.renderProvinces(provinceId).then(() => false),
+                    provinceId
+                        ? this.renderRegencies(provinceId, regencyId).then(() => false)
+                        : Promise.resolve(true),
+                    provinceId && regencyId
+                        ? this.renderDistricts(provinceId, regencyId, districtId).then(() => false)
+                        : Promise.resolve(true),
+                    provinceId && regencyId && districtId
+                        ? this.renderVillages(provinceId, regencyId, districtId, villageId).then(() => false)
+                        : Promise.resolve(true),
+                ]);
+                [
+                    { isEmpty: emptyRegency, select: this.regencySelect },
+                    { isEmpty: emptyDistrict, select: this.districtSelect },
+                    { isEmpty: emptyVillage, select: this.villageSelect },
+                ].forEach(({ isEmpty, select }) => {
+                    if (isEmpty) {
+                        this.emptyOptions(select);
+                        select.disabled = true;
+                    }
+                });
+                return this.setValueQueue = Promise.resolve();
+            })
+            .catch(() => {
+                return this.setValueQueue = Promise.resolve();
             });
-        });
     }
 
     public async setAddressCode(addressCode: string) {

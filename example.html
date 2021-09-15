@@ -22,11 +22,11 @@
         </div>
         <div>
             <label for="regency">Kab/Kota</label>
-            <select id="regency" class="dwap-regency" name="regency" onchange="onRegencySelectChange()"></select>
+            <select id="regency" class="dwap-regency" name="regency"></select>
         </div>
         <div>
             <label for="district">Kecamatan</label>
-            <select id="district" class="dwap-district" name="district" onchange="onDistrictSelectChange()"></select>
+            <select id="district" class="dwap-district" name="district"></select>
         </div>
         <div>
             <label for="village">Kelurahan</label>
@@ -37,9 +37,13 @@
     <p class="p-2">AddressCode: <span id="addressCodeDisplay" class="font-bold">-</span></p>
 
     <script type="module">
-        import { ViewBinder } from 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.7/dist/index.js';
-        const viewBinder = new ViewBinder(document.getElementById('addressForm'));
-
+        import { Repository, ViewBinder } from 'https://cdn.jsdelivr.net/gh/faisalhakim47/dwap@1.1.8/dist/index.js';
+        const repository = new Repository();
+        const viewBinder = new ViewBinder(
+            document.getElementById('addressForm'),
+            repository,
+            '3101011001',
+        );
         const addressCodeDisplay = document.getElementById('addressCodeDisplay');
         viewBinder.addEventListener('change', (addressCode) => {
             addressCodeDisplay.textContent = addressCode;

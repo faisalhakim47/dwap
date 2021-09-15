@@ -2,7 +2,7 @@ import { District, Province, Regency, RegionData, Village } from './domain.js';
 
 export class Repository {
     constructor(
-        private CDN: string = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.7',
+        private CDN: string = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.8',
     ) {}
 
     private async request<T>(url: string) {

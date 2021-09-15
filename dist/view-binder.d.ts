@@ -16,7 +16,8 @@ export declare class ViewBinder {
     static VILLAGE_SELECT_QUERY: string;
     destroy: () => void;
     private eventListeners;
-    constructor(el: HTMLElement, repo?: Repository);
+    private setValueQueue;
+    constructor(el: HTMLElement, repo?: Repository, defaultAddressCode?: string);
     addEventListener(type: string, listener: EventListener): void;
     removeEventListener(type: string, listener: EventListener): void;
     get provinceCode(): string;

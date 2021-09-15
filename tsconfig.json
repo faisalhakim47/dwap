@@ -5,7 +5,8 @@
         "declarationMap": true,
         "module": "ES6",
         "outDir": "dist",
-        "target": "ES5"
+        "target": "ES5",
+        "sourceMap": true
     },
     "files": [
         "src/index.ts"

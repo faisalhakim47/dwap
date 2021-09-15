@@ -36,13 +36,14 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 import { Repository } from './repository.js';
 var ViewBinder = /** @class */ (function () {
-    function ViewBinder(el, repo) {
+    function ViewBinder(el, repo, defaultAddressCode) {
         var _this = this;
         if (repo === void 0) { repo = new Repository(); }
         this.el = el;
         this.repo = repo;
         this.destroy = function () { };
         this.eventListeners = {};
+        this.setValueQueue = Promise.resolve();
         var handleProvinceChange = function () {
             _this.setValue(_this.provinceCode);
         };
@@ -68,6 +69,7 @@ var ViewBinder = /** @class */ (function () {
             _this.repo = null;
             _this.eventListeners = null;
         };
+        this.setAddressCode(defaultAddressCode);
     }
     ViewBinder.prototype.addEventListener = function (type, listener) {
         var listeners = this.eventListeners[type] || (this.eventListeners[type] = []);
@@ -118,37 +120,48 @@ var ViewBinder = /** @class */ (function () {
     });
     ViewBinder.prototype.setValue = function (provinceId, regencyId, districtId, villageId) {
         return __awaiter(this, void 0, void 0, function () {
-            var promises;
             var _this = this;
             return __generator(this, function (_a) {
                 this.regencySelect.disabled = true;
                 this.districtSelect.disabled = true;
                 this.villageSelect.disabled = true;
-                promises = [
-                    this.renderProvinces(provinceId).then(function () { return false; }),
-                    provinceId
-                        ? this.renderRegencies(provinceId, regencyId).then(function () { return false; })
-                        : Promise.resolve(true),
-                    provinceId && regencyId
-                        ? this.renderDistricts(provinceId, regencyId, districtId).then(function () { return false; })
-                        : Promise.resolve(true),
-                    provinceId && regencyId && districtId
-                        ? this.renderVillages(provinceId, regencyId, districtId, villageId).then(function () { return false; })
-                        : Promise.resolve(true),
-                ];
-                return [2 /*return*/, Promise.all(promises).then(function (_a) {
-                        var _ = _a[0], emptyRegency = _a[1], emptyDistrict = _a[2], emptyVillage = _a[3];
-                        [
-                            { isEmpty: emptyRegency, select: _this.regencySelect },
-                            { isEmpty: emptyDistrict, select: _this.districtSelect },
-                            { isEmpty: emptyVillage, select: _this.villageSelect },
-                        ].forEach(function (_a) {
-                            var isEmpty = _a.isEmpty, select = _a.select;
-                            if (isEmpty) {
-                                _this.emptyOptions(select);
-                                select.disabled = true;
+                return [2 /*return*/, this.setValueQueue = this.setValueQueue
+                        .then(function () { return __awaiter(_this, void 0, void 0, function () {
+                        var _a, _, emptyRegency, emptyDistrict, emptyVillage;
+                        var _this = this;
+                        return __generator(this, function (_b) {
+                            switch (_b.label) {
+                                case 0: return [4 /*yield*/, Promise.all([
+                                        this.renderProvinces(provinceId).then(function () { return false; }),
+                                        provinceId
+                                            ? this.renderRegencies(provinceId, regencyId).then(function () { return false; })
+                                            : Promise.resolve(true),
+                                        provinceId && regencyId
+                                            ? this.renderDistricts(provinceId, regencyId, districtId).then(function () { return false; })
+                                            : Promise.resolve(true),
+                                        provinceId && regencyId && districtId
+                                            ? this.renderVillages(provinceId, regencyId, districtId, villageId).then(function () { return false; })
+                                            : Promise.resolve(true),
+                                    ])];
+                                case 1:
+                                    _a = _b.sent(), _ = _a[0], emptyRegency = _a[1], emptyDistrict = _a[2], emptyVillage = _a[3];
+                                    [
+                                        { isEmpty: emptyRegency, select: this.regencySelect },
+                                        { isEmpty: emptyDistrict, select: this.districtSelect },
+                                        { isEmpty: emptyVillage, select: this.villageSelect },
+                                    ].forEach(function (_a) {
+                                        var isEmpty = _a.isEmpty, select = _a.select;
+                                        if (isEmpty) {
+                                            _this.emptyOptions(select);
+                                            select.disabled = true;
+                                        }
+                                    });
+                                    return [2 /*return*/, this.setValueQueue = Promise.resolve()];
                             }
                         });
+                    }); })
+                        .catch(function () {
+                        return _this.setValueQueue = Promise.resolve();
                     })];
             });
         });
@@ -381,3 +394,4 @@ var ViewBinder = /** @class */ (function () {
     return ViewBinder;
 }());
 export { ViewBinder };
+//# sourceMappingURL=view-binder.js.map

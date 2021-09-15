@@ -2,8 +2,6 @@
 deps
 gen
 node_modules
-src
 
-build.ts
-index.html
-tsconfig.json
+recreate-data.ts
+rollup.config.js

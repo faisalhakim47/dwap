@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 var Repository = /** @class */ (function () {
     function Repository(CDN) {
-        if (CDN === void 0) { CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.7'; }
+        if (CDN === void 0) { CDN = 'https://cdn.statically.io/gh/faisalhakim47/dwap/1.1.8'; }
         this.CDN = CDN;
     }
     Repository.prototype.request = function (url) {
@@ -152,3 +152,4 @@ var Repository = /** @class */ (function () {
     return Repository;
 }());
 export { Repository };
+//# sourceMappingURL=repository.js.map
