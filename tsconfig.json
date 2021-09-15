@@ -1,5 +1,16 @@
 {
+    "compilerOptions": {
+        "allowUmdGlobalAccess": true,
+        "declaration": true,
+        "declarationMap": true,
+        "lib": ["ES2015", "DOM"],
+        "module": "UMD",
+        "outDir": "dist",
+        "rootDir": "src",
+        "sourceMap": true,
+        "target": "ES5"
+    },
     "files": [
-        "./build.ts"
+        "./src/index.ts"
     ]
 }
