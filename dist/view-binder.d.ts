@@ -1,12 +1,5 @@
-import { District, Province, Regency, Village } from './domain.js';
 import { Repository } from './repository.js';
 declare type EventListener = (addressCode: string) => void;
-interface DecodedAddressCode {
-    province?: Province;
-    regency?: Regency;
-    district?: District;
-    village?: Village;
-}
 export declare class ViewBinder {
     private el;
     private repo;
@@ -27,7 +20,6 @@ export declare class ViewBinder {
     get addressCode(): string;
     setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string): Promise<void>;
     setAddressCode(addressCode?: string): Promise<void>;
-    decodeAddressCode(addressCode: string): Promise<DecodedAddressCode>;
     private emit;
     private get provinceSelect();
     private get regencySelect();

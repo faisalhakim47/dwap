@@ -1,4 +1,4 @@
-import { District, Province, Regency, Village } from './domain.js';
+import { DecodedAddressCode, District, Province, Regency, Village } from './domain.js';
 export declare class Repository {
     private CDN;
     constructor(CDN: string);
@@ -12,5 +12,6 @@ export declare class Repository {
     getRegency(provinceId: string, regencyId: string): Promise<Regency>;
     getDistrict(provinceId: string, regencyId: string, districtId: string): Promise<District>;
     getVillage(provinceId: string, regencyId: string, districtId: string, villageId: string): Promise<Village>;
+    decodeAddressCode(addressCode: string): Promise<DecodedAddressCode>;
 }
 //# sourceMappingURL=repository.d.ts.map

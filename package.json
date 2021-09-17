@@ -1,6 +1,6 @@
 {
   "name": "dwap",
-  "version": "1.1.14",
+  "version": "1.1.15",
   "description": "Data Wilayah Administrasi Pemerintahan Indonesia",
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.json && node bundle.js",

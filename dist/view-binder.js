@@ -172,42 +172,6 @@ var ViewBinder = /** @class */ (function () {
             });
         });
     };
-    ViewBinder.prototype.decodeAddressCode = function (addressCode) {
-        return __awaiter(this, void 0, void 0, function () {
-            var provinceId, regencyId, districtId, villageId, isValidProvinceId, isValidRegencyId, isValidDistrictId, isValidVillageId, promises, _a, province, regency, district, village;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        provinceId = addressCode.slice(0, 2);
-                        regencyId = addressCode.slice(2, 4);
-                        districtId = addressCode.slice(4, 6);
-                        villageId = addressCode.slice(6);
-                        isValidProvinceId = provinceId.length === 2;
-                        isValidRegencyId = regencyId.length === 2;
-                        isValidDistrictId = districtId.length === 2;
-                        isValidVillageId = villageId.length > 1;
-                        promises = [
-                            isValidProvinceId
-                                ? this.repo.getProvince(provinceId)
-                                : Promise.resolve(null),
-                            isValidProvinceId && isValidRegencyId
-                                ? this.repo.getRegency(provinceId, regencyId)
-                                : Promise.resolve(null),
-                            isValidProvinceId && isValidRegencyId && isValidDistrictId
-                                ? this.repo.getDistrict(provinceId, regencyId, districtId)
-                                : Promise.resolve(null),
-                            isValidProvinceId && isValidRegencyId && isValidDistrictId && isValidVillageId
-                                ? this.repo.getVillage(provinceId, regencyId, districtId, villageId)
-                                : Promise.resolve(null),
-                        ];
-                        return [4 /*yield*/, Promise.all(promises)];
-                    case 1:
-                        _a = _b.sent(), province = _a[0], regency = _a[1], district = _a[2], village = _a[3];
-                        return [2 /*return*/, { province: province, regency: regency, district: district, village: village }];
-                }
-            });
-        });
-    };
     ViewBinder.prototype.emit = function (type, payload) {
         (this.eventListeners[type] = this.eventListeners[type] || [])
             .forEach(function (listener) {
