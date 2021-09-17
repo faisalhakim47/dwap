@@ -1,4 +1,4 @@
-import { District, Province, Regency, RegionData, Village } from './domain.js';
+import { DecodedAddressCode, District, Province, Regency, RegionData, Village } from './domain.js';
 
 export class Repository {
     constructor(
@@ -98,5 +98,32 @@ export class Repository {
                 + '/villages/' + villageId
                 + '.json'
             );
+    }
+
+    public async decodeAddressCode(addressCode: string): Promise<DecodedAddressCode> {
+        const provinceId = addressCode.slice(0, 2);
+        const regencyId = addressCode.slice(2, 4);
+        const districtId = addressCode.slice(4, 6);
+        const villageId = addressCode.slice(6);
+        const isValidProvinceId = provinceId.length === 2;
+        const isValidRegencyId = regencyId.length === 2;
+        const isValidDistrictId = districtId.length === 2;
+        const isValidVillageId = villageId.length > 1;
+        const promises = [
+            isValidProvinceId
+                ? this.getProvince(provinceId)
+                : Promise.resolve(null),
+            isValidProvinceId && isValidRegencyId
+                ? this.getRegency(provinceId, regencyId)
+                : Promise.resolve(null),
+            isValidProvinceId && isValidRegencyId && isValidDistrictId
+                ? this.getDistrict(provinceId, regencyId, districtId)
+                : Promise.resolve(null),
+            isValidProvinceId && isValidRegencyId && isValidDistrictId && isValidVillageId
+                ? this.getVillage(provinceId, regencyId, districtId, villageId)
+                : Promise.resolve(null),
+        ];
+        const [province, regency, district, village] = await Promise.all(promises);
+        return { province, regency, district, village };
     }
 }

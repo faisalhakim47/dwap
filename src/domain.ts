@@ -19,3 +19,10 @@ export interface Village extends RegionData {
     regencyId: string;
     districtId: string;
 }
+
+export interface DecodedAddressCode {
+    province?: Province;
+    regency?: Regency;
+    district?: District;
+    village?: Village;
+}
