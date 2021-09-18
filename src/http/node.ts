@@ -1,4 +1,4 @@
-import fetch from 'node-fetch';
+import 'isomorphic-fetch';
 import { HttpClient } from './http.js';
 
 export class HttpClientNode implements HttpClient {
