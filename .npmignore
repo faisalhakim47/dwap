@@ -8,3 +8,5 @@ node_modules
 
 recreate-data.ts
 rollup.config.js
+tsconfig.json
+tsconfig-node.json
