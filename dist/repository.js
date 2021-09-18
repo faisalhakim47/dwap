@@ -35,42 +35,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var Repository = /** @class */ (function () {
-    function Repository(CDN) {
+    function Repository(CDN, http) {
+        if (http === void 0) { http = Repository.HTTP_CLIENT; }
         this.CDN = CDN;
+        this.http = http;
     }
-    Repository.prototype.request = function (url) {
-        return __awaiter(this, void 0, void 0, function () {
-            var response;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch(url)];
-                    case 1:
-                        response = _a.sent();
-                        return [4 /*yield*/, response.json()];
-                    case 2: return [2 /*return*/, (_a.sent())];
-                }
-            });
-        });
-    };
     Repository.prototype.getMany = function (type, provinceId, regencyId, districtId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 if (!provinceId) {
-                    return [2 /*return*/, this.request(this.CDN
+                    return [2 /*return*/, this.http.get(this.CDN
                             + '/data/' + type + '.json')];
                 }
                 if (!regencyId) {
-                    return [2 /*return*/, this.request(this.CDN
+                    return [2 /*return*/, this.http.get(this.CDN
                             + '/data/provinces/' + provinceId
                             + '/' + type + '.json')];
                 }
                 if (!districtId) {
-                    return [2 /*return*/, this.request(this.CDN
+                    return [2 /*return*/, this.http.get(this.CDN
                             + '/data/provinces/' + provinceId
                             + '/regencies/' + regencyId
                             + '/' + type + '.json')];
                 }
-                return [2 /*return*/, this.request(this.CDN
+                return [2 /*return*/, this.http.get(this.CDN
                         + '/data/provinces/' + provinceId
                         + '/regencies/' + regencyId
                         + '/districts/' + districtId
@@ -109,7 +97,7 @@ var Repository = /** @class */ (function () {
     Repository.prototype.getProvince = function (provinceId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.request(this.CDN
+                return [2 /*return*/, this.http.get(this.CDN
                         + '/data/provinces/' + provinceId
                         + '.json')];
             });
@@ -118,7 +106,7 @@ var Repository = /** @class */ (function () {
     Repository.prototype.getRegency = function (provinceId, regencyId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.request(this.CDN
+                return [2 /*return*/, this.http.get(this.CDN
                         + '/data/provinces/' + provinceId
                         + '/regencies/' + regencyId
                         + '.json')];
@@ -128,7 +116,7 @@ var Repository = /** @class */ (function () {
     Repository.prototype.getDistrict = function (provinceId, regencyId, districtId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.request(this.CDN
+                return [2 /*return*/, this.http.get(this.CDN
                         + '/data/provinces/' + provinceId
                         + '/regencies/' + regencyId
                         + '/districts/' + districtId
@@ -139,7 +127,7 @@ var Repository = /** @class */ (function () {
     Repository.prototype.getVillage = function (provinceId, regencyId, districtId, villageId) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
-                return [2 /*return*/, this.request(this.CDN
+                return [2 /*return*/, this.http.get(this.CDN
                         + '/data/provinces/' + provinceId
                         + '/regencies/' + regencyId
                         + '/districts/' + districtId

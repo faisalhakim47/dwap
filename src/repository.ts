@@ -1,14 +1,13 @@
+import { HttpClient } from './http/http.js';
 import { DecodedAddressCode, District, Province, Regency, RegionData, Village } from './domain.js';
 
 export class Repository {
+    public static HTTP_CLIENT: HttpClient;
+
     constructor(
         private CDN: string,
+        private http: HttpClient = Repository.HTTP_CLIENT,
     ) {}
-
-    private async request<T>(url: string) {
-        const response = await fetch(url);
-        return (await response.json()) as T;
-    }
 
     private async getMany<T extends RegionData>(
         type: string,
@@ -17,27 +16,27 @@ export class Repository {
         districtId?: string,
     ) {
         if (!provinceId) {
-            return this.request<Array<T>>(
+            return this.http.get<Array<T>>(
                 this.CDN
                 + '/data/' + type + '.json'
             );
         }
         if (!regencyId) {
-            return this.request<Array<T>>(
+            return this.http.get<Array<T>>(
                 this.CDN
                 + '/data/provinces/' + provinceId
                 + '/' + type + '.json'
             );
         }
         if (!districtId) {
-            return this.request<Array<T>>(
+            return this.http.get<Array<T>>(
                 this.CDN
                 + '/data/provinces/' + provinceId
                 + '/regencies/' + regencyId
                 + '/' + type + '.json'
             );
         }
-        return this.request<Array<T>>(
+        return this.http.get<Array<T>>(
             this.CDN
             + '/data/provinces/' + provinceId
             + '/regencies/' + regencyId
@@ -63,7 +62,7 @@ export class Repository {
     }
 
     public async getProvince(provinceId: string) {
-        return this.request<Province>(
+        return this.http.get<Province>(
             this.CDN
             + '/data/provinces/' + provinceId
             + '.json'
@@ -71,7 +70,7 @@ export class Repository {
     }
 
     public async getRegency(provinceId: string, regencyId: string) {
-        return this.request<Regency>(
+        return this.http.get<Regency>(
             this.CDN
             + '/data/provinces/' + provinceId
             + '/regencies/' + regencyId
@@ -80,7 +79,7 @@ export class Repository {
     }
 
     public async getDistrict(provinceId: string, regencyId: string, districtId: string) {
-        return this.request<District>(
+        return this.http.get<District>(
             this.CDN
             + '/data/provinces/' + provinceId
             + '/regencies/' + regencyId
@@ -90,7 +89,7 @@ export class Repository {
     }
 
     public async getVillage(provinceId: string, regencyId: string, districtId: string, villageId: string) {
-        return this.request<Village>(
+        return this.http.get<Village>(
                 this.CDN
                 + '/data/provinces/' + provinceId
                 + '/regencies/' + regencyId

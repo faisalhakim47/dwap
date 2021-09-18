@@ -1,8 +1,10 @@
+import { HttpClient } from './http/http.js';
 import { DecodedAddressCode, District, Province, Regency, Village } from './domain.js';
 export declare class Repository {
     private CDN;
-    constructor(CDN: string);
-    private request;
+    private http;
+    static HTTP_CLIENT: HttpClient;
+    constructor(CDN: string, http?: HttpClient);
     private getMany;
     getProvinces(): Promise<Province[]>;
     getRegencies(provinceId?: string): Promise<Regency[]>;
