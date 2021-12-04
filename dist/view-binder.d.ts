@@ -3,6 +3,9 @@ declare type EventListener = (addressCode: string) => void;
 export declare class ViewBinder {
     private el;
     private repo;
+    private disabled;
+    private readonly;
+    private placeholder;
     static PROVINCE_SELECT_QUERY: string;
     static REGENCY_SELECT_QUERY: string;
     static DISTRICT_SELECT_QUERY: string;
@@ -10,8 +13,7 @@ export declare class ViewBinder {
     destroy: () => void;
     private eventListeners;
     private setValueQueue;
-    private disabled;
-    constructor(el: HTMLElement, repo: Repository, defaultAddressCode?: string, disabled?: boolean);
+    constructor(el: HTMLElement, repo: Repository, defaultAddressCode?: string, disabled?: boolean, readonly?: boolean, placeholder?: string);
     addEventListener(type: string, listener: EventListener): void;
     removeEventListener(type: string, listener: EventListener): void;
     get provinceCode(): string;
@@ -20,6 +22,8 @@ export declare class ViewBinder {
     get villageCode(): string;
     get addressCode(): string;
     setDisabled(disabled: boolean): void;
+    setReadonly(readonly: boolean): void;
+    private setSelectReadonly;
     setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string): Promise<void>;
     setAddressCode(addressCode?: string): Promise<void>;
     private emit;

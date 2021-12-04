@@ -35,14 +35,19 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 var ViewBinder = /** @class */ (function () {
-    function ViewBinder(el, repo, defaultAddressCode, disabled) {
+    function ViewBinder(el, repo, defaultAddressCode, disabled, readonly, placeholder) {
         var _this = this;
+        if (disabled === void 0) { disabled = false; }
+        if (readonly === void 0) { readonly = false; }
+        if (placeholder === void 0) { placeholder = '-- pilih --'; }
         this.el = el;
         this.repo = repo;
+        this.disabled = disabled;
+        this.readonly = readonly;
+        this.placeholder = placeholder;
         this.destroy = function () { };
         this.eventListeners = {};
         this.setValueQueue = Promise.resolve();
-        this.disabled = false;
         var handleProvinceChange = function () {
             _this.setValue(_this.provinceCode);
         };
@@ -121,15 +126,28 @@ var ViewBinder = /** @class */ (function () {
         configurable: true
     });
     ViewBinder.prototype.setDisabled = function (disabled) {
+        if (typeof disabled !== 'boolean')
+            return;
         this.disabled = disabled;
-        if (disabled === false)
-            this.provinceSelect.disabled = this.disabled;
-        if (disabled === false)
-            this.regencySelect.disabled = this.disabled;
-        if (disabled === false)
-            this.districtSelect.disabled = this.disabled;
-        if (disabled === false)
-            this.villageSelect.disabled = this.disabled;
+        this.provinceSelect.disabled = this.disabled;
+        this.regencySelect.disabled = this.disabled;
+        this.districtSelect.disabled = this.disabled;
+        this.villageSelect.disabled = this.disabled;
+    };
+    ViewBinder.prototype.setReadonly = function (readonly) {
+        if (typeof readonly !== 'boolean')
+            return;
+        this.readonly = readonly;
+        this.setSelectReadonly(this.provinceSelect);
+        this.setSelectReadonly(this.regencySelect);
+        this.setSelectReadonly(this.districtSelect);
+        this.setSelectReadonly(this.villageSelect);
+    };
+    ViewBinder.prototype.setSelectReadonly = function (select) {
+        var _this = this;
+        Array.from(select.options).forEach(function (option) {
+            option.disabled = (!option.selected && _this.readonly) || option.textContent === _this.placeholder;
+        });
     };
     ViewBinder.prototype.setValue = function (provinceId, regencyId, districtId, villageId) {
         return __awaiter(this, void 0, void 0, function () {
@@ -269,7 +287,7 @@ var ViewBinder = /** @class */ (function () {
             var option = document.createElement('option');
             option.dataset.placeholder = 'placeholder';
             option.disabled = true;
-            option.textContent = '--- Pilih ---';
+            option.textContent = this.placeholder;
             select.insertAdjacentElement('afterbegin', option);
         }
     };
@@ -291,6 +309,7 @@ var ViewBinder = /** @class */ (function () {
                     case 2:
                         this.setSelected(select, provinceId);
                         select.disabled = this.disabled;
+                        this.setSelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -314,6 +333,7 @@ var ViewBinder = /** @class */ (function () {
                     case 2:
                         this.setSelected(select, regencyId);
                         select.disabled = this.disabled;
+                        this.setSelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -337,6 +357,7 @@ var ViewBinder = /** @class */ (function () {
                     case 2:
                         this.setSelected(select, districtId);
                         select.disabled = this.disabled;
+                        this.setSelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -360,6 +381,7 @@ var ViewBinder = /** @class */ (function () {
                     case 2:
                         this.setSelected(select, villageId);
                         select.disabled = this.disabled;
+                        this.setSelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
