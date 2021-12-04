@@ -71,7 +71,7 @@ var ViewBinder = /** @class */ (function () {
         if (typeof defaultAddressCode === 'string')
             this.setAddressCode(defaultAddressCode);
         if (typeof disabled === 'boolean')
-            this.setDisabed(disabled);
+            this.setDisabled(disabled);
     }
     ViewBinder.prototype.addEventListener = function (type, listener) {
         var listeners = this.eventListeners[type] || (this.eventListeners[type] = []);
@@ -120,7 +120,7 @@ var ViewBinder = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    ViewBinder.prototype.setDisabed = function (disabled) {
+    ViewBinder.prototype.setDisabled = function (disabled) {
         this.disabled = disabled;
         if (disabled === false)
             this.provinceSelect.disabled = this.disabled;

@@ -60,7 +60,7 @@ export class ViewBinder {
         };
 
         if (typeof defaultAddressCode === 'string') this.setAddressCode(defaultAddressCode);
-        if (typeof disabled === 'boolean') this.setDisabed(disabled);
+        if (typeof disabled === 'boolean') this.setDisabled(disabled);
     }
 
     public addEventListener(type: string, listener: EventListener): void {
@@ -97,7 +97,7 @@ export class ViewBinder {
         return this.provinceCode + this.regencyCode + this.districtCode + this.villageCode;
     }
 
-    public setDisabed(disabled: boolean) {
+    public setDisabled(disabled: boolean) {
         this.disabled = disabled;
         if (disabled === false) this.provinceSelect.disabled = this.disabled;
         if (disabled === false) this.regencySelect.disabled = this.disabled;
