@@ -10,7 +10,8 @@ export declare class ViewBinder {
     destroy: () => void;
     private eventListeners;
     private setValueQueue;
-    constructor(el: HTMLElement, repo: Repository, defaultAddressCode?: string);
+    private disabled;
+    constructor(el: HTMLElement, repo: Repository, defaultAddressCode?: string, disabled?: boolean);
     addEventListener(type: string, listener: EventListener): void;
     removeEventListener(type: string, listener: EventListener): void;
     get provinceCode(): string;
@@ -18,6 +19,7 @@ export declare class ViewBinder {
     get districtCode(): string;
     get villageCode(): string;
     get addressCode(): string;
+    setDisabed(disabled: boolean): void;
     setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string): Promise<void>;
     setAddressCode(addressCode?: string): Promise<void>;
     private emit;

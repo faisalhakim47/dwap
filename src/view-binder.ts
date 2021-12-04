@@ -16,11 +16,13 @@ export class ViewBinder {
     public destroy = () => {};
     private eventListeners: EventListeners = {};
     private setValueQueue: Promise<void> = Promise.resolve();
+    private disabled = false;
 
     constructor(
         private el: HTMLElement,
         private repo: Repository,
         defaultAddressCode?: string,
+        disabled?: boolean,
     ) {
         const handleProvinceChange = () => {
             this.setValue(this.provinceCode);
@@ -57,7 +59,8 @@ export class ViewBinder {
             this.eventListeners = null;
         };
 
-        this.setAddressCode(defaultAddressCode);
+        if (typeof defaultAddressCode === 'string') this.setAddressCode(defaultAddressCode);
+        if (typeof disabled === 'boolean') this.setDisabed(disabled);
     }
 
     public addEventListener(type: string, listener: EventListener): void {
@@ -92,6 +95,14 @@ export class ViewBinder {
 
     public get addressCode() {
         return this.provinceCode + this.regencyCode + this.districtCode + this.villageCode;
+    }
+
+    public setDisabed(disabled: boolean) {
+        this.disabled = disabled;
+        if (disabled === false) this.provinceSelect.disabled = this.disabled;
+        if (disabled === false) this.regencySelect.disabled = this.disabled;
+        if (disabled === false) this.districtSelect.disabled = this.disabled;
+        if (disabled === false) this.villageSelect.disabled = this.disabled;
     }
 
     public async setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string) {
@@ -224,7 +235,7 @@ export class ViewBinder {
             select.dataset.rendered = 'rendered';
         }
         this.setSelected(select, provinceId);
-        select.disabled = false;
+        select.disabled = this.disabled;
     }
 
     private async renderRegencies(provinceId: string, regencyId: string) {
@@ -236,7 +247,7 @@ export class ViewBinder {
             select.dataset.provinceId = provinceId;
         }
         this.setSelected(select, regencyId);
-        select.disabled = false;
+        select.disabled = this.disabled;
     }
 
     private async renderDistricts(provinceId: string, regencyId: string, districtId: string) {
@@ -248,7 +259,7 @@ export class ViewBinder {
             select.dataset.regencyId = regencyId;
         }
         this.setSelected(select, districtId);
-        select.disabled = false;
+        select.disabled = this.disabled;
     }
 
     private async renderVillages(provinceId: string, regencyId: string, districtId: string, villageId: string) {
@@ -260,6 +271,6 @@ export class ViewBinder {
             select.dataset.districtId = districtId;
         }
         this.setSelected(select, villageId);
-        select.disabled = false;
+        select.disabled = this.disabled;
     }
 }
