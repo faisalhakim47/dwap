@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 var ViewBinder = /** @class */ (function () {
     function ViewBinder(el, repo, defaultAddressCode, disabled, readonly, placeholder) {
         var _this = this;
+        if (defaultAddressCode === void 0) { defaultAddressCode = ''; }
         if (disabled === void 0) { disabled = false; }
         if (readonly === void 0) { readonly = false; }
         if (placeholder === void 0) { placeholder = '-- pilih --'; }
@@ -73,10 +74,7 @@ var ViewBinder = /** @class */ (function () {
             _this.repo = null;
             _this.eventListeners = null;
         };
-        if (typeof defaultAddressCode === 'string')
-            this.setAddressCode(defaultAddressCode);
-        if (typeof disabled === 'boolean')
-            this.setDisabled(disabled);
+        this.setAddressCode(defaultAddressCode);
     }
     ViewBinder.prototype.addEventListener = function (type, listener) {
         var listeners = this.eventListeners[type] || (this.eventListeners[type] = []);
@@ -129,25 +127,34 @@ var ViewBinder = /** @class */ (function () {
         if (typeof disabled !== 'boolean')
             return;
         this.disabled = disabled;
-        this.provinceSelect.disabled = this.disabled;
-        this.regencySelect.disabled = this.disabled;
-        this.districtSelect.disabled = this.disabled;
-        this.villageSelect.disabled = this.disabled;
+        this.applySelectDisabled(this.provinceSelect);
+        this.applySelectDisabled(this.regencySelect);
+        this.applySelectDisabled(this.districtSelect);
+        this.applySelectDisabled(this.villageSelect);
     };
     ViewBinder.prototype.setReadonly = function (readonly) {
         if (typeof readonly !== 'boolean')
             return;
         this.readonly = readonly;
-        this.setSelectReadonly(this.provinceSelect);
-        this.setSelectReadonly(this.regencySelect);
-        this.setSelectReadonly(this.districtSelect);
-        this.setSelectReadonly(this.villageSelect);
+        this.applySelectReadonly(this.provinceSelect);
+        this.applySelectReadonly(this.regencySelect);
+        this.applySelectReadonly(this.districtSelect);
+        this.applySelectReadonly(this.villageSelect);
     };
-    ViewBinder.prototype.setSelectReadonly = function (select) {
+    ViewBinder.prototype.applySelectReadonly = function (select) {
         var _this = this;
-        Array.from(select.options).forEach(function (option) {
+        Array.from(select.options)
+            .forEach(function (option) {
             option.disabled = (!option.selected && _this.readonly) || option.textContent === _this.placeholder;
         });
+    };
+    ViewBinder.prototype.applySelectDisabled = function (select) {
+        if (this.disabled || this.readonly) {
+            select.attributes.setNamedItem(document.createAttribute('disabled'));
+        }
+        else {
+            select.removeAttribute('disabled');
+        }
     };
     ViewBinder.prototype.setValue = function (provinceId, regencyId, districtId, villageId) {
         return __awaiter(this, void 0, void 0, function () {
@@ -298,7 +305,7 @@ var ViewBinder = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         select = this.provinceSelect;
-                        select.disabled = true;
+                        select.attributes.setNamedItem(document.createAttribute('disabled'));
                         if (!(select.dataset.rendered !== 'rendered')) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.repo.getProvinces()];
                     case 1:
@@ -308,8 +315,8 @@ var ViewBinder = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         this.setSelected(select, provinceId);
-                        select.disabled = this.disabled;
-                        this.setSelectReadonly(select);
+                        this.applySelectDisabled(select);
+                        this.applySelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -322,7 +329,7 @@ var ViewBinder = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         select = this.regencySelect;
-                        select.disabled = true;
+                        select.attributes.setNamedItem(document.createAttribute('disabled'));
                         if (!(select.dataset.provinceId !== provinceId)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.repo.getRegencies(provinceId)];
                     case 1:
@@ -332,8 +339,8 @@ var ViewBinder = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         this.setSelected(select, regencyId);
-                        select.disabled = this.disabled;
-                        this.setSelectReadonly(select);
+                        this.applySelectDisabled(select);
+                        this.applySelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -346,7 +353,7 @@ var ViewBinder = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         select = this.districtSelect;
-                        select.disabled = true;
+                        select.attributes.setNamedItem(document.createAttribute('disabled'));
                         if (!(select.dataset.regencyId !== regencyId)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.repo.getDistricts(provinceId, regencyId)];
                     case 1:
@@ -356,8 +363,8 @@ var ViewBinder = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         this.setSelected(select, districtId);
-                        select.disabled = this.disabled;
-                        this.setSelectReadonly(select);
+                        this.applySelectDisabled(select);
+                        this.applySelectReadonly(select);
                         return [2 /*return*/];
                 }
             });
@@ -370,7 +377,7 @@ var ViewBinder = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         select = this.villageSelect;
-                        select.disabled = true;
+                        select.attributes.setNamedItem(document.createAttribute('disabled'));
                         if (!(select.dataset.districtId !== districtId)) return [3 /*break*/, 2];
                         return [4 /*yield*/, this.repo.getVillages(provinceId, regencyId, districtId)];
                     case 1:
@@ -380,8 +387,8 @@ var ViewBinder = /** @class */ (function () {
                         _a.label = 2;
                     case 2:
                         this.setSelected(select, villageId);
-                        select.disabled = this.disabled;
-                        this.setSelectReadonly(select);
+                        this.applySelectDisabled(select);
+                        this.applySelectReadonly(select);
                         return [2 /*return*/];
                 }
             });

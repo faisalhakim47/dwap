@@ -23,7 +23,8 @@ export declare class ViewBinder {
     get addressCode(): string;
     setDisabled(disabled: boolean): void;
     setReadonly(readonly: boolean): void;
-    private setSelectReadonly;
+    private applySelectReadonly;
+    private applySelectDisabled;
     setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string): Promise<void>;
     setAddressCode(addressCode?: string): Promise<void>;
     private emit;

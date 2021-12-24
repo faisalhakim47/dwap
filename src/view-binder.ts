@@ -20,7 +20,7 @@ export class ViewBinder {
     constructor(
         private el: HTMLElement,
         private repo: Repository,
-        defaultAddressCode?: string,
+        defaultAddressCode: string = '',
         private disabled: boolean = false,
         private readonly: boolean = false,
         private placeholder: string = '-- pilih --',
@@ -60,8 +60,7 @@ export class ViewBinder {
             this.eventListeners = null;
         };
 
-        if (typeof defaultAddressCode === 'string') this.setAddressCode(defaultAddressCode);
-        if (typeof disabled === 'boolean') this.setDisabled(disabled);
+        this.setAddressCode(defaultAddressCode);
     }
 
     public addEventListener(type: string, listener: EventListener): void {
@@ -101,25 +100,34 @@ export class ViewBinder {
     public setDisabled(disabled: boolean) {
         if (typeof disabled !== 'boolean') return;
         this.disabled = disabled;
-        this.provinceSelect.disabled = this.disabled;
-        this.regencySelect.disabled = this.disabled;
-        this.districtSelect.disabled = this.disabled;
-        this.villageSelect.disabled = this.disabled;
+        this.applySelectDisabled(this.provinceSelect);
+        this.applySelectDisabled(this.regencySelect);
+        this.applySelectDisabled(this.districtSelect);
+        this.applySelectDisabled(this.villageSelect);
     }
 
     public setReadonly(readonly: boolean) {
         if (typeof readonly !== 'boolean') return;
         this.readonly = readonly;
-        this.setSelectReadonly(this.provinceSelect);
-        this.setSelectReadonly(this.regencySelect);
-        this.setSelectReadonly(this.districtSelect);
-        this.setSelectReadonly(this.villageSelect);
+        this.applySelectReadonly(this.provinceSelect);
+        this.applySelectReadonly(this.regencySelect);
+        this.applySelectReadonly(this.districtSelect);
+        this.applySelectReadonly(this.villageSelect);
     }
 
-    private setSelectReadonly(select: HTMLSelectElement) {
-        Array.from(select.options).forEach((option) => {
-            option.disabled = (!option.selected && this.readonly) || option.textContent === this.placeholder;
-        });
+    private applySelectReadonly(select: HTMLSelectElement) {
+        Array.from(select.options)
+            .forEach((option) => {
+                option.disabled = (!option.selected && this.readonly) || option.textContent === this.placeholder;
+            });
+    }
+
+    private applySelectDisabled(select: HTMLSelectElement) {
+        if (this.disabled || this.readonly) {
+            select.attributes.setNamedItem(document.createAttribute('disabled'));
+        } else {
+            select.removeAttribute('disabled');
+        }
     }
 
     public async setValue(provinceId?: string, regencyId?: string, districtId?: string, villageId?: string) {
@@ -245,53 +253,53 @@ export class ViewBinder {
 
     private async renderProvinces(provinceId: string) {
         const select = this.provinceSelect;
-        select.disabled = true;
+        select.attributes.setNamedItem(document.createAttribute('disabled'));
         if (select.dataset.rendered !== 'rendered') {
             const options = await this.repo.getProvinces();
             this.renderOptions(select, options);
             select.dataset.rendered = 'rendered';
         }
         this.setSelected(select, provinceId);
-        select.disabled = this.disabled;
-        this.setSelectReadonly(select);
+        this.applySelectDisabled(select);
+        this.applySelectReadonly(select);
     }
 
     private async renderRegencies(provinceId: string, regencyId: string) {
         const select = this.regencySelect;
-        select.disabled = true;
+        select.attributes.setNamedItem(document.createAttribute('disabled'));
         if (select.dataset.provinceId !== provinceId) {
             const options = await this.repo.getRegencies(provinceId);
             this.renderOptions(select, options);
             select.dataset.provinceId = provinceId;
         }
         this.setSelected(select, regencyId);
-        select.disabled = this.disabled;
-        this.setSelectReadonly(select);
+        this.applySelectDisabled(select);
+        this.applySelectReadonly(select);
     }
 
     private async renderDistricts(provinceId: string, regencyId: string, districtId: string) {
         const select = this.districtSelect;
-        select.disabled = true;
+        select.attributes.setNamedItem(document.createAttribute('disabled'));
         if (select.dataset.regencyId !== regencyId) {
             const options = await this.repo.getDistricts(provinceId, regencyId);
             this.renderOptions(select, options);
             select.dataset.regencyId = regencyId;
         }
         this.setSelected(select, districtId);
-        select.disabled = this.disabled;
-        this.setSelectReadonly(select);
+        this.applySelectDisabled(select);
+        this.applySelectReadonly(select);
     }
 
     private async renderVillages(provinceId: string, regencyId: string, districtId: string, villageId: string) {
         const select = this.villageSelect;
-        select.disabled = true;
+        select.attributes.setNamedItem(document.createAttribute('disabled'));
         if (select.dataset.districtId !== districtId) {
             const options = await this.repo.getVillages(provinceId, regencyId, districtId);
             this.renderOptions(select, options);
             select.dataset.districtId = districtId;
         }
         this.setSelected(select, villageId);
-        select.disabled = this.disabled;
-        this.setSelectReadonly(select);
+        this.applySelectDisabled(select);
+        this.applySelectReadonly(select);
     }
 }
