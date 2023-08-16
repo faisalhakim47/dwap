@@ -1,1 +1,1 @@
-[{"id":"2001","provinceId":"21","regencyId":"04","districtId":"10","name":"Busung Panjang"},{"id":"2002","provinceId":"21","regencyId":"04","districtId":"10","name":"Posek"},{"id":"2003","provinceId":"21","regencyId":"04","districtId":"10","name":"Suak Buaya"}]
+[{"code":"2001","provinceCode":"21","regencyCode":"04","districtCode":"10","name":"Busung Panjang"},{"code":"2002","provinceCode":"21","regencyCode":"04","districtCode":"10","name":"Posek"},{"code":"2003","provinceCode":"21","regencyCode":"04","districtCode":"10","name":"Suak Buaya"}]

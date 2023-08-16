@@ -1,1 +1,1 @@
-[{"id":"2001","provinceId":"92","regencyId":"06","districtId":"24","name":"Igomu"},{"id":"2002","provinceId":"92","regencyId":"06","districtId":"24","name":"Mesna"},{"id":"2003","provinceId":"92","regencyId":"06","districtId":"24","name":"Sumuy"}]
+[{"code":"2001","provinceCode":"92","regencyCode":"06","districtCode":"24","name":"Igomu"},{"code":"2002","provinceCode":"92","regencyCode":"06","districtCode":"24","name":"Mesna"},{"code":"2003","provinceCode":"92","regencyCode":"06","districtCode":"24","name":"Sumuy"}]

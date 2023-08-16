@@ -1,1 +1,1 @@
-[{"id":"2001","provinceId":"81","regencyId":"08","districtId":"16","name":"Hila"},{"id":"2002","provinceId":"81","regencyId":"08","districtId":"16","name":"Jerusu"},{"id":"2003","provinceId":"81","regencyId":"08","districtId":"16","name":"Solath"}]
+[{"code":"2001","provinceCode":"81","regencyCode":"08","districtCode":"16","name":"Hila"},{"code":"2002","provinceCode":"81","regencyCode":"08","districtCode":"16","name":"Jerusu"},{"code":"2003","provinceCode":"81","regencyCode":"08","districtCode":"16","name":"Solath"}]

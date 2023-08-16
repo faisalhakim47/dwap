@@ -1,1 +1,1 @@
-[{"id":"2001","provinceId":"21","regencyId":"05","districtId":"09","name":"Impol"},{"id":"2002","provinceId":"21","regencyId":"05","districtId":"09","name":"Keramut"},{"id":"2003","provinceId":"21","regencyId":"05","districtId":"09","name":"Sunggak"}]
+[{"code":"2001","provinceCode":"21","regencyCode":"05","districtCode":"09","name":"Impol"},{"code":"2002","provinceCode":"21","regencyCode":"05","districtCode":"09","name":"Keramut"},{"code":"2003","provinceCode":"21","regencyCode":"05","districtCode":"09","name":"Sunggak"}]

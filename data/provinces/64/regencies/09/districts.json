@@ -1,1 +1,1 @@
-[{"id":"01","provinceId":"64","regencyId":"09","name":"Penajam"},{"id":"02","provinceId":"64","regencyId":"09","name":"Waru"},{"id":"03","provinceId":"64","regencyId":"09","name":"Babulu"},{"id":"04","provinceId":"64","regencyId":"09","name":"Sepaku"}]
+[{"code":"01","provinceCode":"64","regencyCode":"09","name":"Penajam"},{"code":"02","provinceCode":"64","regencyCode":"09","name":"Waru"},{"code":"03","provinceCode":"64","regencyCode":"09","name":"Babulu"},{"code":"04","provinceCode":"64","regencyCode":"09","name":"Sepaku"}]

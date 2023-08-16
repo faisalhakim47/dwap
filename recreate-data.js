@@ -5,7 +5,7 @@ const path = require('path');
 
 
 (async function () {
-  const SOURCE = "https://raw.githubusercontent.com/cahyadsn/wilayah/master/db/wilayah.sql";
+  const SOURCE = "https://raw.githubusercontent.com/cahyadsn/wilayah/v2202.06/db/wilayah_2022.sql";
 
   const request = await fetch(SOURCE);
   const raw = await request.text();
@@ -24,13 +24,24 @@ const path = require('path');
       const type = keyParts.length;
       return {
         type,
-        provinceId: keyParts[0],
-        regencyId: keyParts[1],
-        districtId: keyParts[2],
-        villageId: keyParts[3],
+        provinceCode: keyParts[0],
+        regencyCode: keyParts[1],
+        districtCode: keyParts[2],
+        villageCode: keyParts[3],
         name: row.slice(row.indexOf("','") + 3, row.indexOf("')")),
       };
     });
+
+  for (const row of data) {
+    if (
+      (row.type === 1 && (typeof row.provinceCode !== 'string' || row.provinceCode.length !== 2))
+      || (row.type === 2 && (typeof row.provinceCode !== 'string' || row.provinceCode.length !== 2) && (typeof row.regencyCode !== 'string' || row.regencyCode.length !== 2))
+      || (row.type === 3 && (typeof row.provinceCode !== 'string' || row.provinceCode.length !== 2) && (typeof row.regencyCode !== 'string' || row.regencyCode.length !== 2) && (typeof row.districtCode !== 'string' || row.districtCode.length !== 2))
+      || (row.type === 4 && (typeof row.provinceCode !== 'string' || row.provinceCode.length !== 2) && (typeof row.regencyCode !== 'string' || row.regencyCode.length !== 2) && (typeof row.districtCode !== 'string' || row.districtCode.length !== 2) && (typeof row.villageCode !== 'string' || row.villageCode.length !== 4))
+    ) {
+      throw new Error(`SOMETHING WRONG WITH: ${row}`);
+    }
+  }
 
   await emptyDir("./data");
 
@@ -45,21 +56,21 @@ const path = require('path');
   await write("./data/villages.json", villages.map(formatVillage));
 
   for (const province of provinces) {
-    const provinceDir = "./data/provinces/" + province.provinceId;
+    const provinceDir = "./data/provinces/" + province.provinceCode;
 
     await ensureDir(provinceDir);
 
     const regencies = data.filter((row) =>
       row.type === 2 &&
-      row.provinceId === province.provinceId
+      row.provinceCode === province.provinceCode
     );
     const districts = data.filter((row) =>
       row.type === 3 &&
-      row.provinceId === province.provinceId
+      row.provinceCode === province.provinceCode
     );
     const villages = data.filter((row) =>
       row.type === 4 &&
-      row.provinceId === province.provinceId
+      row.provinceCode === province.provinceCode
     );
 
     await write(provinceDir + ".json", formatProvince(province));
@@ -68,19 +79,19 @@ const path = require('path');
     await write(provinceDir + "/villages.json", villages.map(formatVillage));
 
     for (const regency of regencies) {
-      const regencyDir = provinceDir + "/regencies/" + regency.regencyId;
+      const regencyDir = provinceDir + "/regencies/" + regency.regencyCode;
 
       await ensureDir(regencyDir);
 
       const districts = data.filter((row) =>
         row.type === 3 &&
-        row.provinceId === province.provinceId &&
-        row.regencyId === regency.regencyId
+        row.provinceCode === province.provinceCode &&
+        row.regencyCode === regency.regencyCode
       );
       const villages = data.filter((row) =>
         row.type === 4 &&
-        row.provinceId === province.provinceId &&
-        row.regencyId === regency.regencyId
+        row.provinceCode === province.provinceCode &&
+        row.regencyCode === regency.regencyCode
       );
 
       await write(regencyDir + ".json", formatRegency(regency));
@@ -88,15 +99,15 @@ const path = require('path');
       await write(regencyDir + "/villages.json", villages.map(formatVillage));
 
       for (const district of districts) {
-        const districtDir = regencyDir + "/districts/" + district.districtId;
+        const districtDir = regencyDir + "/districts/" + district.districtCode;
 
         await ensureDir(districtDir);
 
         const villages = data.filter((row) =>
           row.type === 4 &&
-          row.provinceId === province.provinceId &&
-          row.regencyId === regency.regencyId &&
-          row.districtId === district.districtId
+          row.provinceCode === province.provinceCode &&
+          row.regencyCode === regency.regencyCode &&
+          row.districtCode === district.districtCode
         );
 
         await write(districtDir + ".json", formatDistrict(district));
@@ -105,7 +116,7 @@ const path = require('path');
         await ensureDir(districtDir + "/villages");
 
         for (const village of villages) {
-          const villageDir = districtDir + "/villages/" + village.villageId;
+          const villageDir = districtDir + "/villages/" + village.villageCode;
           await write(villageDir + ".json", formatVillage(village));
         }
       }
@@ -150,10 +161,10 @@ async function emptyDir(dir) {
 /**
  * @typedef {Object} Row
  * @property {number} type
- * @property {string} provinceId
- * @property {string} regencyId
- * @property {string} districtId
- * @property {string} villageId
+ * @property {string} provinceCode
+ * @property {string} regencyCode
+ * @property {string} districtCode
+ * @property {string} villageCode
  * @property {string} name
  */
 
@@ -161,29 +172,29 @@ async function emptyDir(dir) {
 /**
  * @param {Row} param0
  */
-function formatProvince({ provinceId, name }) {
-  return { id: provinceId, name };
+function formatProvince({ provinceCode, name }) {
+  return { code: provinceCode, name };
 }
 
 /**
  * @param {Row} param0
  */
-function formatRegency({ provinceId, regencyId, name }) {
-  return { id: regencyId, provinceId, name };
+function formatRegency({ provinceCode, regencyCode, name }) {
+  return { code: regencyCode, provinceCode, name };
 }
 
 /**
  * @param {Row} param0
  */
-function formatDistrict({ provinceId, regencyId, districtId, name }) {
-  return { id: districtId, provinceId, regencyId, name };
+function formatDistrict({ provinceCode, regencyCode, districtCode, name }) {
+  return { code: districtCode, provinceCode, regencyCode, name };
 }
 
 /**
  * @param {Row} param0
  */
 function formatVillage(
-  { villageId, provinceId, regencyId, districtId, name },
+  { villageCode, provinceCode, regencyCode, districtCode, name },
 ) {
-  return { id: villageId, provinceId, regencyId, districtId, name };
+  return { code: villageCode, provinceCode, regencyCode, districtCode, name };
 }
