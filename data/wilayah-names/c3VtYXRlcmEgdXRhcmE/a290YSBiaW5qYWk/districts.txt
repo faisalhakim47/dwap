@@ -1,0 +1,5 @@
+Binjai Utara
+Binjai Kota
+Binjai Barat
+Binjai Timur
+Binjai Selatan
