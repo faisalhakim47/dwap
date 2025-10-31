@@ -23,7 +23,7 @@ const wilayahSql = (existingWilayahSqlStat?.isFile() && env.FETCH_WILAYAH_SQL !=
 /**
  * @typedef {object} District
  * @property {string} name
- * @property {Array<string>} vilages
+ * @property {Array<string>} villages
  */
 
 /**
@@ -61,15 +61,15 @@ const wilayah = wilayahSql
     if (provinceCode && regencyCode && districtCode && villageCode) {
       wilayah[provinceCode] = wilayah[provinceCode] || { regencies: {} };
       wilayah[provinceCode].regencies[regencyCode] = wilayah[provinceCode].regencies[regencyCode] || { districts: {} };
-      wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = wilayah[provinceCode].regencies[regencyCode].districts[districtCode] || { vilages: [] };
-      wilayah[provinceCode].regencies[regencyCode].districts[districtCode].vilages.push(name);
+      wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = wilayah[provinceCode].regencies[regencyCode].districts[districtCode] || { villages: [] };
+      wilayah[provinceCode].regencies[regencyCode].districts[districtCode].villages.push(name);
     }
     else if (provinceCode && regencyCode && districtCode && !villageCode) {
       wilayah[provinceCode] = wilayah[provinceCode] || { regencies: {} };
       wilayah[provinceCode].regencies[regencyCode] = wilayah[provinceCode].regencies[regencyCode] || { districts: {} };
       wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = {
         name,
-        vilages: wilayah[provinceCode].regencies[regencyCode].districts[districtCode]?.vilages || [],
+        villages: wilayah[provinceCode].regencies[regencyCode].districts[districtCode]?.villages || [],
       };
     }
     else if (provinceCode && regencyCode && !districtCode && !villageCode) {

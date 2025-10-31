@@ -23,7 +23,7 @@ const wilayahSql = (existingWilayahSqlStat?.isFile() && env.FETCH_WILAYAH_SQL !=
 /**
  * @typedef {object} District
  * @property {string} name
- * @property {Array<string>} vilages
+ * @property {Array<string>} villages
  */
 
 /**
@@ -61,15 +61,15 @@ const wilayah = wilayahSql
     if (provinceCode && regencyCode && districtCode && villageCode) {
       wilayah[provinceCode] = wilayah[provinceCode] || { regencies: {} };
       wilayah[provinceCode].regencies[regencyCode] = wilayah[provinceCode].regencies[regencyCode] || { districts: {} };
-      wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = wilayah[provinceCode].regencies[regencyCode].districts[districtCode] || { vilages: [] };
-      wilayah[provinceCode].regencies[regencyCode].districts[districtCode].vilages.push(name);
+      wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = wilayah[provinceCode].regencies[regencyCode].districts[districtCode] || { villages: [] };
+      wilayah[provinceCode].regencies[regencyCode].districts[districtCode].villages.push(name);
     }
     else if (provinceCode && regencyCode && districtCode && !villageCode) {
       wilayah[provinceCode] = wilayah[provinceCode] || { regencies: {} };
       wilayah[provinceCode].regencies[regencyCode] = wilayah[provinceCode].regencies[regencyCode] || { districts: {} };
       wilayah[provinceCode].regencies[regencyCode].districts[districtCode] = {
         name,
-        vilages: wilayah[provinceCode].regencies[regencyCode].districts[districtCode]?.vilages || [],
+        villages: wilayah[provinceCode].regencies[regencyCode].districts[districtCode]?.villages || [],
       };
     }
     else if (provinceCode && regencyCode && !districtCode && !villageCode) {
@@ -131,11 +131,11 @@ for (const [_, { name: provinceName, regencies }] of Object.entries(wilayah)) {
     await mkdir(regencyDir, { recursive: true });
     await writeFile(join(regencyDir, 'districts.txt'), extractWilayahNames(districts), { encoding: 'utf-8' });
 
-    for (const [_, { name: districtName, vilages }] of Object.entries(districts)) {
+    for (const [_, { name: districtName, villages }] of Object.entries(districts)) {
       const districtBase64Url = encodeWilayahName(districtName);
       const districtDir = join(regencyDir, districtBase64Url);
       await mkdir(districtDir, { recursive: true });
-      await writeFile(join(districtDir, 'vilages.txt'), vilages.join('\n'), { encoding: 'utf-8' });
+      await writeFile(join(districtDir, 'villages.txt'), villages.join('\n'), { encoding: 'utf-8' });
     }
   }
 }
