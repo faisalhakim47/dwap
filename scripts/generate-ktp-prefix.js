@@ -95,9 +95,9 @@ const dataPlainDir = join(__dirname, '../data/ktp-prefix');
 await rm(dataPlainDir, { recursive: true, force: true });
 await mkdir(dataPlainDir, { recursive: true });
 
-for (const [provinceCode, { regencies }] of Object.entries(wilayah)) {
-  for (const [regencyCode, { districts }] of Object.entries(regencies)) {
-    const districtTsv = Object
+for (const [provinceCode, { name: provinceName, regencies }] of Object.entries(wilayah)) {
+  for (const [regencyCode, { name: regencyName, districts }] of Object.entries(regencies)) {
+    const districtTsv = `${provinceName}\t${regencyName}\n` + Object
       .keys(districts)
       .map(function (districtCode) {
         return `${districtCode}\t${districts[districtCode].name}`;
